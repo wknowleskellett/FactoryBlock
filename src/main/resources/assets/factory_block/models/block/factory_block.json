@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+	  "down": "factory_block:block/factory_block_down",
+	  "east": "factory_block:block/factory_block",
+	  "north": "factory_block:block/factory_block",
+	  "particle": "factory_block:block/factory_block",
+	  "south": "factory_block:block/factory_block",
+	  "up": "factory_block:block/factory_block",
+	  "west": "factory_block:block/factory_block"
+	}
+  }
