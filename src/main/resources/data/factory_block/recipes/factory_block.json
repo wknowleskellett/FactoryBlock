@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "!",
+        "#"
+    ],
+    "key": {
+        "!": {
+            "item": "minecraft:lever"
+        },
+        "#": {
+            "item": "minecraft:crafting_table"
+        }
+    },
+    "result": {
+        "item": "factory_block:factory_block",
+        "count": 1
+    },
+    "group": "misc"
+}

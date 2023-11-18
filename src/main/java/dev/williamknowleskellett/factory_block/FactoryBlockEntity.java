@@ -17,7 +17,7 @@ public class FactoryBlockEntity extends BlockEntity implements SidedInventory {
     public static int ORIGINAL_STACK = 0;
     public static int CLONE_STACK = 1;
     private static int[] SLOTS = new int[] { 0, 1 };
-    protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(3, ItemStack.EMPTY);
+    protected DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
 
     public FactoryBlockEntity(BlockPos pos, BlockState state) {
         super(FactoryBlockMod.FACTORY_BLOCK_ENTITY, pos, state);
@@ -36,7 +36,7 @@ public class FactoryBlockEntity extends BlockEntity implements SidedInventory {
 
     @Override
     public boolean isEmpty() {
-        return this.inventory.get(1).isEmpty();
+        return this.inventory.get(CLONE_STACK).isEmpty();
     }
 
     @Override
@@ -69,6 +69,7 @@ public class FactoryBlockEntity extends BlockEntity implements SidedInventory {
         if (slot != ORIGINAL_STACK)
             return;
         this.markDirty();
+        stack.setCount(stack.getMaxCount());
         this.inventory.set(CLONE_STACK, stack);
         // this.inventory.set(CLONE_STACK, stack.copy());
     }
@@ -110,34 +111,37 @@ public class FactoryBlockEntity extends BlockEntity implements SidedInventory {
 
     @Override
     public boolean canInsert(int slot, ItemStack stack, Direction direction) {
-        return slot == 0;
+        return slot == ORIGINAL_STACK;
     }
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction direction) {
-        return slot == 1;
+        return slot == CLONE_STACK;
     }
 
-    public ActionResult interact(ItemStack itemStack, PlayerEntity player, Hand hand) {
-        // ItemStack itemStack = player.getStackInHand(hand);
+    public ActionResult interact(PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getStackInHand(hand);
         boolean factoryIsEmpty = this.inventory.get(CLONE_STACK).isEmpty();
         boolean handIsEmpty = itemStack.isEmpty();
+        FactoryBlockMod.LOGGER.info(factoryIsEmpty ? "Factory is empty" : "Factory is not empty");
+        FactoryBlockMod.LOGGER.info(handIsEmpty ? "Hand is empty" : "Hand is not empty");
         if (this.world.isClient) {
-            return factoryIsEmpty && handIsEmpty ? ActionResult.PASS : ActionResult.SUCCESS;
+            return ActionResult.CONSUME;
         }
-        if (factoryIsEmpty) {
-            if (!handIsEmpty && !this.isRemoved()) {
-                this.inventory.set(CLONE_STACK, itemStack.copy());
-                // this.emitGameEvent(GameEvent.BLOCK_CHANGE, player);
-                if (!player.getAbilities().creativeMode) {
-                    itemStack.setCount(0);
-                }
-                return ActionResult.SUCCESS;
+        if (handIsEmpty) {
+            if (factoryIsEmpty) {
+                return ActionResult.PASS;
             }
-        } else if (handIsEmpty) {
             player.setStackInHand(hand, this.inventory.get(CLONE_STACK).copy());
-            return ActionResult.SUCCESS;
+            FactoryBlockMod.LOGGER.info("Filled hand " + hand.name());
+        } else {
+            this.setStack(ORIGINAL_STACK, itemStack.copy());
+            // this.emitGameEvent(GameEvent.BLOCK_CHANGE, player);
+            if (!player.getAbilities().creativeMode) {
+                itemStack.setCount(0);
+            }
+            FactoryBlockMod.LOGGER.info("Emptied hand " + hand.name());
         }
-        return ActionResult.CONSUME;
+        return ActionResult.SUCCESS;
     }
 }

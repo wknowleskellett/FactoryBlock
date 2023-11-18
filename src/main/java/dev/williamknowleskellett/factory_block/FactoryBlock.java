@@ -5,7 +5,6 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -29,9 +28,7 @@ public class FactoryBlock extends Block implements BlockEntityProvider {
 
         BlockEntity blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof FactoryBlockEntity factoryBlockEntity) {
-            // DemoBlockEntity demoBlockEntity = (DemoBlockEntity) blockEntity;
-            ItemStack itemStack = player.getStackInHand(hand);
-            return factoryBlockEntity.interact(itemStack, player, hand);
+            return factoryBlockEntity.interact(player, hand);
         }
 
         return ActionResult.PASS;

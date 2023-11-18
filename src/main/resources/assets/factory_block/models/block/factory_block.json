@@ -2,11 +2,11 @@
 	"parent": "minecraft:block/cube",
 	"textures": {
 	  "down": "factory_block:block/factory_block_down",
-	  "east": "factory_block:block/factory_block",
-	  "north": "factory_block:block/factory_block",
-	  "particle": "factory_block:block/factory_block",
-	  "south": "factory_block:block/factory_block",
-	  "up": "factory_block:block/factory_block",
-	  "west": "factory_block:block/factory_block"
+	  "east": "factory_block:block/factory_block_side",
+	  "north": "factory_block:block/factory_block_side",
+	  "particle": "factory_block:block/factory_block_side",
+	  "south": "factory_block:block/factory_block_side",
+	  "up": "factory_block:block/factory_block_up",
+	  "west": "factory_block:block/factory_block_side"
 	}
   }
